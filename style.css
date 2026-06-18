@@ -1,0 +1,384 @@
+/* =====================
+   DESIGN TOKENS — PIRATE THEME
+   ===================== */
+:root {
+  --color-gold:       #f0a500;
+  --color-gold-light: #ffe066;
+  --color-gold-dark:  #b87320;
+  --color-dark:       #1a0a00;
+  --color-dark-mid:   #2d1200;
+  --color-wood:       #6b3a1f;
+  --color-wood-light: #8B4513;
+  --color-parchment:  #f5e6c8;
+  --color-parchment-dark: #d4b896;
+  --color-text:       #f5e6c8;
+  --color-text-dim:   #c4a875;
+  --color-success:    #4caf50;
+  --color-danger:     #c0392b;
+
+  --font-title: 'Georgia', 'Times New Roman', serif;
+  --font-body:  'Georgia', serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  --transition: 300ms ease;
+  --transition-slow: 600ms ease;
+}
+
+/* =====================
+   RESET
+   ===================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-body);
+  background: var(--color-dark);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* A-Frame canvas ocupa tudo */
+a-scene {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+
+/* =====================
+   HUD (Heads-Up Display)
+   ===================== */
+#hud {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  display: none; /* ativado por JS ao iniciar */
+}
+
+#hud-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 16px;
+}
+
+#score-panel {
+  background: rgba(26, 10, 0, 0.75);
+  border: 1px solid var(--color-gold-dark);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.hud-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  margin-bottom: 2px;
+}
+
+#score {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-gold);
+  text-shadow: 0 0 8px rgba(240, 165, 0, 0.6);
+}
+
+#compass {
+  font-size: 2rem;
+  animation: spin-compass 8s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(240, 165, 0, 0.5));
+}
+
+@keyframes spin-compass {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Caixa de mensagens contextual */
+#message-box {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 10, 0, 0.9);
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  text-align: center;
+  color: var(--color-gold-light);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  max-width: 320px;
+  animation: fadeInUp 0.4s ease;
+  pointer-events: none;
+}
+
+#message-box.hidden {
+  display: none;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Dica VR mobile */
+#vr-hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(26, 10, 0, 0.8);
+  border: 1px solid var(--color-gold-dark);
+  border-radius: var(--radius-lg);
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  color: var(--color-text-dim);
+  white-space: nowrap;
+}
+
+#vr-hint.hidden { display: none; }
+
+/* =====================
+   ECRÃ DE INTRO
+   ===================== */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center,
+    rgba(45, 18, 0, 0.97) 0%,
+    rgba(10, 4, 0, 0.99) 100%
+  );
+  animation: fadeIn 0.8s ease;
+}
+
+#intro-content {
+  text-align: center;
+  max-width: 400px;
+  padding: 24px;
+}
+
+.skull {
+  font-size: 5rem;
+  margin-bottom: 12px;
+  animation: floatBob 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(240, 165, 0, 0.4));
+}
+
+@keyframes floatBob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-10px) rotate(3deg); }
+}
+
+#intro-content h1 {
+  font-family: var(--font-title);
+  font-size: 2.8rem;
+  font-weight: bold;
+  color: var(--color-gold);
+  text-shadow: 0 0 20px rgba(240, 165, 0, 0.5), 0 2px 4px rgba(0,0,0,0.8);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.description {
+  font-size: 0.92rem;
+  color: var(--color-parchment-dark);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.description strong {
+  color: var(--color-gold);
+}
+
+.controls-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 28px;
+  padding: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(240, 165, 0, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.control-item {
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.06em;
+}
+
+/* Botões */
+#start-btn,
+#restart-btn {
+  background: linear-gradient(135deg, var(--color-gold-dark), var(--color-gold));
+  color: var(--color-dark);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 14px 36px;
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 16px rgba(240, 165, 0, 0.35);
+  pointer-events: all;
+}
+
+#start-btn:hover,
+#restart-btn:hover {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-light));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(240, 165, 0, 0.55);
+}
+
+#start-btn:active,
+#restart-btn:active {
+  transform: translateY(0);
+}
+
+/* =====================
+   ECRÃ DE VITÓRIA
+   ===================== */
+#victory-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center,
+    rgba(30, 20, 0, 0.97) 0%,
+    rgba(5, 3, 0, 0.99) 100%
+  );
+  animation: fadeIn 0.8s ease;
+}
+
+#victory-screen.hidden { display: none; }
+
+#victory-content {
+  text-align: center;
+  max-width: 380px;
+  padding: 32px 24px;
+}
+
+.trophy {
+  font-size: 6rem;
+  margin-bottom: 12px;
+  animation: victoryPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 30px rgba(240, 165, 0, 0.7));
+}
+
+@keyframes victoryPulse {
+  0%, 100% { transform: scale(1) rotate(-5deg); }
+  50%       { transform: scale(1.1) rotate(5deg); }
+}
+
+#victory-content h2 {
+  font-family: var(--font-title);
+  font-size: 3rem;
+  color: var(--color-gold);
+  text-shadow: 0 0 30px rgba(240, 165, 0, 0.7);
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+}
+
+#victory-content p {
+  font-size: 0.95rem;
+  color: var(--color-parchment-dark);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.gold-text {
+  color: var(--color-gold-light) !important;
+  font-style: italic;
+  margin-bottom: 28px !important;
+}
+
+/* =====================
+   UTILITÁRIOS
+   ===================== */
+.hidden { display: none !important; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Pulse do cursor ao focar baú */
+.cursor-fusing {
+  filter: brightness(2);
+}
+
+/* Barra de progresso do fuse (CSS ring via A-Frame cursor) */
+a-cursor {
+  /* Controlado diretamente pelo A-Frame */
+}
+
+/* =====================
+   RESPONSIVO
+   ===================== */
+@media (max-width: 480px) {
+  #intro-content h1 { font-size: 2rem; }
+  .skull             { font-size: 3.5rem; }
+  #score-panel       { padding: 6px 10px; }
+  #score             { font-size: 0.95rem; }
+  .description       { font-size: 0.83rem; }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #intro-screen, #victory-screen {
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+  #intro-content, #victory-content {
+    padding: 12px;
+  }
+  .skull, .trophy { font-size: 2.5rem; }
+  #intro-content h1, #victory-content h2 { font-size: 1.8rem; }
+  .controls-hint { display: none; }
+}
