@@ -1,0 +1,12 @@
+{
+  "name": "projeto_vr",
+  "version": "1.0.0",
+  "description": "Caça ao Tesouro VR - A-Frame",
+  "scripts": {
+    "start": "npx http-server . -p 8080",
+    "dev": "npx live-server --port=8080 ."
+  },
+  "keywords": ["aframe", "vr", "webgl", "game"],
+  "author": "",
+  "license": "MIT"
+}
