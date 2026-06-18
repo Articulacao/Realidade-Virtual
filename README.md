@@ -17,6 +17,8 @@ npx live-server --port=8080 .
 
 Abra `http://localhost:8080` no navegador.
 
+Preview online: https://piratevr.netlify.app/
+
 Observações
 - O projeto usa A-Frame via CDN. Para produção, considere hospedar a lib localmente ou adicionar SRI/crossorigin.
 - Coloque modelos, texturas e sons na pasta `assets/` e referencie-os no bloco `<a-assets>` em `index.html`.
